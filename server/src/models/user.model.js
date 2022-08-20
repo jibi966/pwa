@@ -19,6 +19,11 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
+// checkpassword
+// .lean() and .exex() will give an issue
+UserSchema.methods.checkpassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
 // Hashing the password
 // ES6 is not supported in Schema.pre callbacks, so carefull while hashing the password
 UserSchema.pre("save", function (next) {
