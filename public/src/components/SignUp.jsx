@@ -18,13 +18,23 @@ export default function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
-    console.log({
+    const userData = {
       firstName: data.get("firstName"),
       lastName: data.get("lastName"),
       email: data.get("email"),
       password: data.get("password"),
-    });
+    };
+
+    axios
+      .post("http://localhost:8080/user/create-account", userData)
+      .then(({ data }) => {
+        data.success
+          ? alert("Account created successfully")
+          : alert("Account not created successfully");
+      })
+      .catch((err) => {
+        alert("Error creating account");
+      });
   };
 
   return (

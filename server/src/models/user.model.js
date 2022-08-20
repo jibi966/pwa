@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -17,5 +18,15 @@ const UserSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Hashing the password
+// ES6 is not supported in Schema.pre callbacks, so carefull while hashing the password
+UserSchema.pre("save", function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  this.password = bcrypt.hashSync(this.password, 4);
+  return next();
+});
 
 module.exports = mongoose.model("user", UserSchema);
